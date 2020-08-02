@@ -1,0 +1,39 @@
+#######################################
+# Syntax Coloring Map For BMX_sensor
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+BMX_SENSOR	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+getTemperature	KEYWORD2
+getPressure	KEYWORD2
+getPressureAtSealevel	KEYWORD2
+getHumidity	KEYWORD2
+startSingleMeasure	KEYWORD2
+getI2Cadr	KEYWORD2
+getChipId	KEYWORD2
+isBMP180	KEYWORD2
+isBMP280	KEYWORD2
+isBME280	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+
+
+
+
+
