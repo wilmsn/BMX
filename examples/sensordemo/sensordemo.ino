@@ -48,13 +48,25 @@ void setup() {
 void loop() {
   sensor.startSingleMeasure();
   Serial.print("Temperatur: ");
-  Serial.println(sensor.getTemperature());
+  if (sensor.hasTemperature()) {
+    Serial.println(sensor.getTemperature());
+  } else {
+    Serial.println("Sensor unterstützt diese Messung nicht");
+  }
   Serial.print("Druck: ");
-  Serial.println(sensor.getPressure());
-  Serial.print("Druck at Sealevel: ");
-  Serial.println(sensor.getPressureAtSealevel(95));
+  if (sensor.hasPressure()) {
+    Serial.println(sensor.getPressure());
+    Serial.print("Druck at Sealevel: ");
+    Serial.println(sensor.getPressureAtSealevel(95));
+  } else {
+    Serial.println("Sensor unterstützt diese Messung nicht");
+  }
   Serial.print("Feuchte: ");
+  if (sensor.hasHumidity()) {
   Serial.println(sensor.getHumidity());
+  } else {
+    Serial.println("Sensor unterstützt diese Messung nicht");
+  }
   Serial.println("---------------------------------------");
   delay(2000); 
 }

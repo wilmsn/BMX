@@ -123,7 +123,7 @@ The settings can be changed in the header  file (this file)
 class BMX_SENSOR
 {
   public:
-    BMX_SENSOR(void);  
+    BMX_SENSOR();  
     void begin(void);
     void begin(uint8_t);
     void startSingleMeasure(void);
@@ -132,10 +132,13 @@ class BMX_SENSOR
     float getHumidity(void);
     float getPressureAtSealevel(float);
     uint8_t getChipId(void);
+    uint8_t getI2Cadr(void);
     bool isBMP180(void);
     bool isBMP280(void);
     bool isBME280(void);
-    uint8_t getI2Cadr(void);
+    bool hasTemperature(void);
+    bool hasPressure(void);
+    bool hasHumidity(void);
     
   private:
     void readRawData(void);

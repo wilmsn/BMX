@@ -418,3 +418,28 @@ bool BMX_SENSOR::isBMP180(void)
 {
   return bmp180;
 }
+
+//*************************************************************************
+// true if the Sensor mesures temperature
+bool BMX_SENSOR::hasTemperature(void)
+{
+    //All implemented sensores have this measure
+    return true;
+}
+
+//*************************************************************************
+// true if the Sensor mesures pressure
+bool BMX_SENSOR::hasPressure(void)
+{
+    //All implemented sensores have this measure
+    return true;
+}
+    
+//*************************************************************************
+// true if the Sensor mesures humidity
+bool BMX_SENSOR::hasHumidity(void)
+{
+    //Only BME280 has this measure
+    return bme280;
+}
+
