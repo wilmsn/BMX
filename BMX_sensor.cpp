@@ -100,7 +100,7 @@ void BMX_SENSOR::startSingleMeasure()
   if ( bmp280 | bme280 ) {
     write8(BME280_CTRL_HUM_REG, ORS_H);
     write8(BMX_CONTROL_REG, BMX280_CONTROL_VAL);
-    while (statusMeas()) delay(1); //Warte bis Messzyklus beendet
+    delay(10); // Pauschale Zeit zur Verarbeitung fuer den Sensor
     readRawData();
   }
   if ( bmp180 ) {
@@ -193,19 +193,22 @@ void BMX_SENSOR::readRawData()
 float BMX_SENSOR::calcTemp()
 {
   int32_t t_var1, t_var2;
-  
-  if ( bmp280 | bme280 ) {
+  float retval = 0;
+  if ( bmp280 || bme280 ) 
+  {
     t_var1 = (((adc_T >> 3) - (CALIB_T1 << 1)) * CALIB_T2) >> 11;
     t_var2 = (((((adc_T >> 4) - (CALIB_T1)) * ((adc_T >> 4) - CALIB_T1)) >> 12) * CALIB_T3) >> 14;
     t_fine = t_var1 + t_var2;
-    return (float)((t_fine * 5 + 128) >> 8) / 100.0;
+    retval = (float)((t_fine * 5 + 128) >> 8) / 100.0;
   }
-  if ( bmp180 ) {
+  if ( bmp180 ) 
+  {
     t_var1 = (adc_T - CALIB_AC6) * CALIB_AC5 >> 15;
     t_var2 = ((int32_t)CALIB_MC << 11) / (t_var1 + CALIB_MD);
     t_fine = t_var1 + t_var2;
-    return ((float)((t_fine + 8) >> 4))/10.0; 
+    retval = ((float)((t_fine + 8) >> 4))/10.0; 
   }
+  return retval;
 }
 
 //*************************************************************************
@@ -218,7 +221,7 @@ float BMX_SENSOR::calcPress()
   int64_t press;
   int32_t x3, b3, b6, p;
   uint32_t b4, b7;
-
+  float retval = 0;
   if ( bmp280 | bme280 ) {  
     var1 = t_fine - 128000;
     var2 = var1 * var1 * (int64_t)CALIB_P6;
@@ -233,7 +236,7 @@ float BMX_SENSOR::calcPress()
     var2 = (((int64_t)CALIB_P8) * press) >> 19;
     press = ((press + var1 + var2) >> 8) + (((int64_t)CALIB_P7) << 4);
     press /= 256;
-    return (float) press/ 100.0;
+    retval = (float) press/ 100.0;
   }
   if ( bmp180 ) {
     b6 = (int32_t)t_fine - 4000;
@@ -250,8 +253,9 @@ float BMX_SENSOR::calcPress()
     t_var1 = (p >> 8) * (p >> 8);
     t_var1 = (t_var1 * 3038) >> 16;
     t_var2 = (-7357 * p) >> 16;
-    return (float)(p + ((t_var1 + t_var2 + 3791) >> 4))/100.0;
-  }  
+    retval = (float)(p + ((t_var1 + t_var2 + 3791) >> 4))/100.0;
+  }
+  return retval;
 }
 
 //*************************************************************************
@@ -357,10 +361,12 @@ uint16_t BMX_SENSOR::read16u(uint8_t adr, bool msb_first)
 bool BMX_SENSOR::statusMeas()
 {
   uint8_t reg;
+  bool retval = false;
   if ( bmp280 | bme280 ) {	
     reg = read8u(BMX_STATUS_REG);
-    return (reg & B00001000) >> 3;
+    retval = (reg & B00001000) >> 3;
   }
+  return retval;
 }
 
 //*************************************************************************
